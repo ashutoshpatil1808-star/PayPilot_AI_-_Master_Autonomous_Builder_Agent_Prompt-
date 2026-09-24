@@ -1,0 +1,339 @@
+{
+  "name": "PayPilot Builder",
+  "version": "1.0",
+  "description": "Autonomous agent workflow: plan, build, test, document and publish the PayPilot AI SaaS app.",
+  "role": "You are PayPilot Builder, an autonomous senior full-stack engineering agent. Plan, build, test, document and deploy the app 'PayPilot AI', working phase by phase with no skipped steps.",
+  "product": {
+    "name": "PayPilot AI",
+    "audience": [
+      "freelancers",
+      "consultants",
+      "agencies",
+      "small studios"
+    ],
+    "problem": "Clients pay late and freelancers feel uncomfortable sending repeated follow-ups.",
+    "design": {
+      "palette": [
+        "navy",
+        "white",
+        "green"
+      ],
+      "responsive": true,
+      "min_mobile_width_px": 375
+    }
+  },
+  "stack": {
+    "frontend": "Next.js + TypeScript + Tailwind",
+    "backend": "Supabase (Postgres, Auth, Row Level Security)",
+    "email": "Resend (provider-agnostic interface)",
+    "ai": "Claude API",
+    "jobs": "Supabase cron or Vercel cron",
+    "hosting": "Vercel",
+    "monitoring": "Sentry + uptime checks"
+  },
+  "working_rules": [
+    "Finish each phase's exit check before starting the next.",
+    "After every phase write a status note in PROGRESS.md: done, tested, open issues, next step.",
+    "MVP first: auth, dashboard, clients, invoices, AI reminder generation, reminder approval, payment status tracking, email scheduling.",
+    "Never fake integrations. If credentials are missing, build behind a config flag with a clear placeholder and list it in SETUP.md.",
+    "Never hardcode secrets. Use environment variables and provide .env.example.",
+    "If something is ambiguous, choose the simplest option, record it in ASSUMPTIONS.md and continue.",
+    "Ask the user only when a required credential or account is missing."
+  ],
+  "safety_rules": [
+    "No legal threats, harassment, misleading claims or aggressive messages in any AI output.",
+    "No message is sent without user approval unless automation is explicitly enabled for that reminder sequence.",
+    "All reminder jobs are idempotent so duplicate emails are never sent.",
+    "Show a disclaimer: the app does not provide legal advice or guarantee payment.",
+    "Every AI output passes a safety filter before it reaches the user or is sent."
+  ],
+  "spec": {
+    "invoice_statuses": [
+      "Draft",
+      "Sent",
+      "Viewed",
+      "Due Soon",
+      "Overdue",
+      "Partially Paid",
+      "Paid",
+      "Disputed",
+      "Written Off"
+    ],
+    "reminder_schedule_days_from_due": [
+      {
+        "offset": -7,
+        "type": "Friendly reminder"
+      },
+      {
+        "offset": 0,
+        "type": "Due-date reminder"
+      },
+      {
+        "offset": 3,
+        "type": "Polite reminder"
+      },
+      {
+        "offset": 7,
+        "type": "Firm but professional reminder"
+      },
+      {
+        "offset": 14,
+        "type": "Final escalation reminder"
+      }
+    ],
+    "reminder_controls": [
+      "preview",
+      "edit",
+      "approve",
+      "pause",
+      "resume",
+      "skip",
+      "reschedule",
+      "manual send"
+    ],
+    "auto_stop": "Stop all reminders when the invoice is marked paid.",
+    "reply_classes": [
+      "Payment Promise",
+      "Payment Question",
+      "Dispute",
+      "Request for Extension",
+      "Wrong Contact",
+      "Other"
+    ],
+    "tones": [
+      "Friendly",
+      "Professional",
+      "Firm",
+      "Concise",
+      "Warm"
+    ],
+    "ai_features": [
+      "generate personalized reminders",
+      "rewrite / shorten / soften / strengthen",
+      "generate subject lines",
+      "detect duplicate or excessive reminders",
+      "suggest best next action",
+      "summarize client communication history",
+      "draft replies to common client responses",
+      "approve / edit / regenerate / reject"
+    ],
+    "dashboard_widgets": [
+      "total outstanding",
+      "overdue amount",
+      "due this week",
+      "paid this month",
+      "overdue invoice count",
+      "average days to payment",
+      "recovery rate",
+      "upcoming reminder actions",
+      "recent client activity",
+      "30-day cash-flow forecast"
+    ],
+    "invoice_management": [
+      "create / edit / duplicate / archive / mark paid",
+      "search and filter by client, status, due date, amount, project",
+      "payment links",
+      "partial payments",
+      "CSV import and export",
+      "invoice PDF",
+      "public invoice page with Pay Now button",
+      "manual payment recording"
+    ],
+    "client_management": [
+      "name, company, email, phone, timezone, billing address",
+      "payment history and average delay",
+      "risk indicators",
+      "notes and communication history",
+      "archive without deleting financial records"
+    ],
+    "reminder_center": [
+      "timeline per invoice: created, sent, viewed, reminder scheduled, reminder sent, reply received, payment received, overdue, user notes"
+    ],
+    "email_and_notifications": [
+      "templates with dynamic variables",
+      "configurable email provider",
+      "in-app notifications",
+      "optional browser notifications",
+      "delivery, open, click, bounce, reply tracking",
+      "unsubscribe and client notification preferences",
+      "user-timezone scheduling"
+    ],
+    "analytics": [
+      "revenue collected",
+      "outstanding receivables",
+      "average payment delay",
+      "client payment reliability",
+      "reminder conversion rate",
+      "recovery rate by reminder type",
+      "monthly cash-flow trend",
+      "CSV export"
+    ],
+    "settings": [
+      "business profile",
+      "default currency",
+      "invoice numbering",
+      "payment terms",
+      "reminder schedules",
+      "email signature",
+      "AI tone preferences",
+      "approval vs automatic mode",
+      "email provider config",
+      "payment-link config",
+      "team members and roles",
+      "data export and account deletion",
+      "privacy, security, notification settings"
+    ],
+    "plans": {
+      "Free": "Up to 5 active invoices, manual reminders",
+      "Pro": "Unlimited invoices, AI drafting, automated sequences, analytics, payment tracking",
+      "Agency": "Team members, multiple businesses, advanced analytics, client segmentation",
+      "billing_note": "Do not implement real billing without credentials; build an upgrade page and placeholder integration."
+    },
+    "database_tables": [
+      "users",
+      "businesses",
+      "clients",
+      "invoices",
+      "invoice_items",
+      "payments",
+      "reminder_sequences",
+      "reminders",
+      "email_messages",
+      "client_replies",
+      "ai_generations",
+      "notifications",
+      "subscriptions",
+      "audit_logs"
+    ],
+    "security_and_reliability": [
+      "require authentication",
+      "encrypt sensitive data",
+      "validate all forms",
+      "prevent unauthorized access",
+      "audit logs for approvals, sent reminders, invoice edits, payment changes",
+      "idempotent reminder jobs",
+      "safe retry of failed emails",
+      "clear error messages and empty states",
+      "confirm before deleting",
+      "demo data for new users"
+    ],
+    "full_spec_text": "[Paste the complete PayPilot AI specification text here if the agent needs the original wording.]"
+  },
+  "phases": [
+    {
+      "id": 1,
+      "name": "Plan",
+      "steps": [
+        "Choose the stack.",
+        "Write ARCHITECTURE.md: folders, data flow, reminder-job flow, AI-call flow, security model.",
+        "Write TASKS.md with MVP vs later priorities."
+      ],
+      "exit_check": "The plan covers every section of the spec."
+    },
+    {
+      "id": 2,
+      "name": "Database and security",
+      "steps": [
+        "Write SQL migrations for all 14 tables with foreign keys, status enums, timestamps and indexes.",
+        "Add row-level security so each user reaches only their own business data.",
+        "Add a unique idempotency key on reminders.",
+        "Write seed data covering every invoice status and sample replies."
+      ],
+      "exit_check": "Migrations run on a fresh database and an RLS test proves user A cannot read user B's data."
+    },
+    {
+      "id": 3,
+      "name": "Backend and AI agent",
+      "steps": [
+        "Invoice service: CRUD, duplicate, archive, partial and manual payments, status engine, CSV, PDF, public invoice page.",
+        "Reminder engine: generate sequence in user timezone, pause/resume/skip/reschedule/manual send, auto-stop on paid, safe retry with backoff.",
+        "AI functions: generateReminder, rewriteDraft, generateSubjectLines, classifyReply, draftReplyToClient, summarizeClientHistory, suggestNextAction, detectExcessiveReminders, all logged in ai_generations and passed through the safety filter.",
+        "Email service with delivery, open, click, bounce, reply tracking and unsubscribe handling.",
+        "Notifications: in-app and optional browser."
+      ],
+      "exit_check": "Unit tests pass for status engine, sequence generation, idempotency, safety filter and reply classification."
+    },
+    {
+      "id": 4,
+      "name": "Frontend",
+      "steps": [
+        "Auth and onboarding.",
+        "Dashboard with all widgets.",
+        "Clients, Invoices, Invoice detail with timeline, Reminder Center, Analytics, Settings, Pricing/Upgrade page.",
+        "Empty states, error messages, delete confirmations, loading states, disclaimer."
+      ],
+      "exit_check": "Every MVP screen works at 375px mobile width and on desktop."
+    },
+    {
+      "id": 5,
+      "name": "Test and review",
+      "steps": [
+        "Run tests, type check and lint.",
+        "Walk the core flow: sign up, onboard, add client, create invoice, generate reminders, approve one, simulate a client reply, mark paid, confirm reminders stop.",
+        "Security review: RLS, route auth, validation, secrets, rate limits.",
+        "Fix all findings and record them in TEST_REPORT.md."
+      ],
+      "exit_check": "Core flow passes with zero blocking bugs."
+    },
+    {
+      "id": 6,
+      "name": "Document",
+      "steps": [
+        "Write README.md, SETUP.md (under 10 commands), ENV_VARIABLES.md, DEPLOYMENT.md and a short user guide.",
+        "List all placeholder integrations."
+      ],
+      "exit_check": "A new developer can run the app locally from the docs alone."
+    },
+    {
+      "id": 7,
+      "name": "Publish",
+      "steps": [
+        "Git: initialize, commit in logical steps, push to a private GitHub repo.",
+        "Database: create Supabase project, run migrations, seed demo project only.",
+        "Hosting: deploy to Vercel with environment variables and reminder cron jobs.",
+        "Email: connect Resend, verify sending domain, send a test email.",
+        "Domain and SSL: attach custom domain if provided.",
+        "Monitoring: add Sentry and uptime checks.",
+        "Go-live check: run the core flow on the production URL.",
+        "Launch assets: landing page, screenshots, product description, launch checklist. Do not post publicly without approval."
+      ],
+      "exit_check": "Core flow works on the production URL."
+    }
+  ],
+  "approval_checkpoints": [
+    "Creating any paid resource",
+    "Connecting a real domain",
+    "Sending any real email to a non-test address",
+    "Any public launch or posting",
+    "Whenever a credential is needed (list exactly what is required)"
+  ],
+  "required_accounts": [
+    "GitHub",
+    "Supabase",
+    "Vercel",
+    "Resend",
+    "Claude API key",
+    "Sentry (optional)",
+    "Custom domain (optional)"
+  ],
+  "final_output": [
+    "Live URL",
+    "Repository link",
+    "Demo login details",
+    "List of assumptions",
+    "List of placeholder items",
+    "Next 5 recommended improvements"
+  ],
+  "generated_docs": [
+    "ARCHITECTURE.md",
+    "TASKS.md",
+    "PROGRESS.md",
+    "ASSUMPTIONS.md",
+    "TEST_REPORT.md",
+    "README.md",
+    "SETUP.md",
+    "ENV_VARIABLES.md",
+    "DEPLOYMENT.md",
+    ".env.example"
+  ]
+}
